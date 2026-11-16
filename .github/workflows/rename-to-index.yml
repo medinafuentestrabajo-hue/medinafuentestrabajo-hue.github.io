@@ -1,0 +1,26 @@
+name: Restore homepage as index
+on:
+  push:
+    paths:
+      - .github/workflows/rename-to-index.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Restore and rename
+        run: |
+          git config user.name "medinafuentestrabajo-hue"
+          git config user.email "medina.fuentes.trabajo@gmail.com"
+          git checkout a49d23e -- agencia-de-viajes.html
+          ls -l agencia-de-viajes.html
+          mv agencia-de-viajes.html index.html
+          git add -A
+          git status --short
+          git commit -m "Restore Penavia Travel homepage as index.html" || echo "nothing to commit"
+          git push
